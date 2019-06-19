@@ -125,6 +125,7 @@ dirty_img_rot = abs(np.fft.ifft2(np.fft.fftshift(np.multiply(vis_img2,
 # Plotting images
 plt.style.use('dark_background')
 
+# Plots of UV coverage as a fuction of wavelength
 fig, ((ax0, ax1, ax2), (ax3, ax4, ax5)) = plt.subplots(2, 3, figsize=(14, 7))
 
 ax0.plot(uv_lambda[0][0], uv_lambda[0][1], ',', color='white')
@@ -168,9 +169,10 @@ ax5.set_xlim([-256, 256])
 ax5.set_ylim([-256, 256])
 ax5.set_aspect('equal')
 
-
 fig.tight_layout()
 
+
+# Plots of dirty images (Snapshots, not rotation) as a function of wavelength.
 fig, ((ax0, ax1, ax2), (ax3, ax4, ax5)) = plt.subplots(2, 3, figsize=(14, 7))
 
 im0 = ax0.imshow(images[0], cmap='magma')
@@ -206,6 +208,7 @@ cbar5 = plt.colorbar(im5, ax=ax5)
 fig.tight_layout()
 
 
+# Plots of dirty image with and without rotation synthesis.
 fig, ((ax3, ax4)) = plt.subplots(1, 2, figsize=(11, 4))
 
 im3 = ax3.imshow(dirty_img, cmap='magma')
@@ -219,6 +222,7 @@ cbar4 = plt.colorbar(im4, ax=ax4)
 fig.tight_layout()
 
 
+# Plots of original data and visibilities.
 fig, ((ax1, ax2)) = plt.subplots(1, 2, figsize=(11, 4))
 
 im1 = ax1.imshow(img, cmap='magma')
@@ -231,8 +235,7 @@ ax2.set_aspect('equal')
 cbar2 = plt.colorbar(im2, ax=ax2)
 fig.tight_layout()
 
-# Array configurations and UV sampling
-
+# Plots of array configurations and UV sampling with and without rotation.
 fig, (ax1, ax2, ax3) = plt.subplots(nrows=1, ncols=3, figsize=(15, 5))
 
 ax1.plot(array.x, array.y, ',', color='white')
