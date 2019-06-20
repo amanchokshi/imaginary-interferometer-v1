@@ -1,7 +1,7 @@
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from PIL import Image
-import matplotlib.pyplot as plt
 
 # The inupt image represents the 'true' sky intensity as a function of position
 img = np.array(Image.open('data/star.png').convert("L"))
