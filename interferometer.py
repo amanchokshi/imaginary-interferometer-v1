@@ -128,42 +128,42 @@ plt.style.use('dark_background')
 # Plots of UV coverage as a fuction of wavelength
 fig, ((ax0, ax1, ax2), (ax3, ax4, ax5)) = plt.subplots(2, 3, figsize=(14, 7))
 
-ax0.plot(uv_lambda[0][0], uv_lambda[0][1], marker=',', color='white')
+ax0.plot(uv_lambda[0][0], uv_lambda[0][1], ',', color='white')
 ax0.set_title('Lambda =' + str(wavelength[0]))
 ax0.set_xlim([-256, 256])
 ax0.set_ylim([-256, 256])
 ax0.set_aspect('equal')
 
 
-ax1.plot(uv_lambda[1][0], uv_lambda[1][1], marker=',', color='white')
+ax1.plot(uv_lambda[1][0], uv_lambda[1][1], ',', color='white')
 ax1.set_title('Lambda =' + str(wavelength[1]))
 ax1.set_xlim([-256, 256])
 ax1.set_ylim([-256, 256])
 ax1.set_aspect('equal')
 
 
-ax2.plot(uv_lambda[2][0], uv_lambda[2][1], marker=',', color='white')
+ax2.plot(uv_lambda[2][0], uv_lambda[2][1], ',', color='white')
 ax2.set_title('Lambda =' + str(wavelength[2]))
 ax2.set_xlim([-256, 256])
 ax2.set_ylim([-256, 256])
 ax2.set_aspect('equal')
 
 
-ax3.plot(uv_lambda[3][0], uv_lambda[3][1], marker=',', color='white')
+ax3.plot(uv_lambda[3][0], uv_lambda[3][1], ',', color='white')
 ax3.set_title('lambda =' + str(wavelength[3]))
 ax3.set_xlim([-256, 256])
 ax3.set_ylim([-256, 256])
 ax3.set_aspect('equal')
 
 
-ax4.plot(uv_lambda[4][0], uv_lambda[4][1], marker=',', color='white')
+ax4.plot(uv_lambda[4][0], uv_lambda[4][1], ',', color='white')
 ax4.set_title('Lambda =' + str(wavelength[4]))
 ax4.set_xlim([-256, 256])
 ax4.set_ylim([-256, 256])
 ax4.set_aspect('equal')
 
 
-ax5.plot(uv_lambda[5][0], uv_lambda[5][1], marker=',', color='white')
+ax5.plot(uv_lambda[5][0], uv_lambda[5][1], ',', color='white')
 ax5.set_title('Lambda =' + str(wavelength[5]))
 ax5.set_xlim([-256, 256])
 ax5.set_ylim([-256, 256])
@@ -238,13 +238,14 @@ fig.tight_layout()
 # Plots of array configurations and UV sampling with and without rotation.
 fig, (ax1, ax2, ax3) = plt.subplots(nrows=1, ncols=3, figsize=(15, 5))
 
+
 ax1.plot(array.x, array.y, ',', color='white')
 ax1.set_title('Array Configuraton')
 ax1.set_aspect('equal')
-ax2.plot(u, v, marker=',', color='white')
+ax2.plot(u, v, ',', color='white')
 ax2.set_title('$UV$ Snapshot')
 ax2.set_aspect('equal')
-ax3.plot(u_rot, v_rot, marker=',', color='white')
+ax3.plot(u_rot, v_rot, ',', color='white')
 ax3.set_title('$UV$ Rotation Synthesis')
 ax3.set_aspect('equal')
 fig.tight_layout()
