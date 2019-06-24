@@ -62,7 +62,7 @@ n_obs = int(round(obs_time/cadence))  # Number of individual observations
 declination = 45  # Decliantion of the phase center of the source, in degrees
 dec = np.radians(declination)  # Concert to radians
 
-init_hour = -4  # Initial hour angle in hours
+init_hour = -(obs_t/2)  # Initial hour angle in hours
 h_0 = np.radians(init_hour*15)  # Initial hour angle in radians
 
 # List of Hour angle positions for each snapshot
@@ -251,12 +251,19 @@ fig, (ax1, ax2, ax3) = plt.subplots(nrows=1, ncols=3, figsize=(15, 5))
 ax1.plot(array.E, array.N, ',', color='white')
 ax1.set_title('Array Configuraton')
 ax1.set_aspect('equal')
-ax2.plot(lx, ly, ',', color='white')
+ax1.set_xlim((-x_0/2, x_0/2))
+ax1.set_ylim((-y_0/2, y_0/2))
+ax2.plot(np.concatenate(E - E[:, None]),
+         np.concatenate(N - N[:, None]), ',', color='white')
 ax2.set_title('$UV$ Snapshot')
 ax2.set_aspect('equal')
+ax2.set_xlim((-x_0, x_0))
+ax2.set_ylim((-y_0, y_0))
 ax3.plot(u_rot, v_rot, ',', color='white')
 ax3.set_title('$UV$ Rotation Synthesis')
 ax3.set_aspect('equal')
+ax3.set_xlim((-x_0, x_0))
+ax3.set_ylim((-y_0, y_0))
 fig.tight_layout()
 
 plt.show()
