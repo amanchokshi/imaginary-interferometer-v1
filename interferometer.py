@@ -26,8 +26,8 @@ vis_img_mag = np.log10(abs(vis_img))
 array = pd.read_csv('arrays/array-vla.csv')
 
 # X,Y coordinates of tiles.
-x = np.array(list(array.x))
-y = np.array(list(array.y))
+x = np.array(list(array.E))
+y = np.array(list(array.N))
 
 
 # UV sampling function depends on sampling of uv space by baselines.
@@ -240,7 +240,7 @@ fig.tight_layout()
 fig, (ax1, ax2, ax3) = plt.subplots(nrows=1, ncols=3, figsize=(15, 5))
 
 
-ax1.plot(array.x, array.y, ',', color='white')
+ax1.plot(array.E, array.N, ',', color='white')
 ax1.set_title('Array Configuraton')
 ax1.set_aspect('equal')
 ax2.plot(u, v, ',', color='white')
