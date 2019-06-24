@@ -18,45 +18,49 @@ vis_img3 = np.copy(vis_img)
 # Log transform enables us to view the large dynamic range of visibilities
 vis_img_mag = np.log10(abs(vis_img))
 
-# The coordinates of the center of UV plane.
-[u_0, v_0] = (np.array(np.shape(vis_img))/2).astype(np.int)
+# The coordinates of the center of image plane.
+[x_0, y_0] = (np.array(np.shape(vis_img))/2).astype(np.int)
 
+array_latitude = 35
+lat = np.radians(array_latitude)
 # Reads array positions from array.csv file
 # array-vla uses a n^(1.716) power law distribution like the real VLA
 array = pd.read_csv('arrays/array-vla.csv')
 
 # X,Y coordinates of tiles.
-x = np.array(list(array.E))
-y = np.array(list(array.N))
+E = np.array(list(array.E))
+N = np.array(list(array.N))
+
+# The array positions are defined in a tangent plane at the location of the array center.
+# Bases on the latitude of the array, we transform the (E,N) coordinates to an ECEF (x,y,z) coordinates.
+x = -np.sin(lat)*N
+y = E
+z = np.cos(lat)*N
 
 
 # UV sampling function depends on sampling of uv space by baselines.
-# The baseline for every antenna w.r.t every other antenna is determined.
+# The baseline for every antenna w.r.t every other antenna is determined
 # This code is equivalent to two nested for loops
-u = np.concatenate(x - x[:, None])
-v = np.concatenate(y - y[:, None])
+lx = np.concatenate(x - x[:, None])
+ly = np.concatenate(y - y[:, None])
+lz = np.concatenate(z - z[:, None])
 
 
-# As the Earth rotates, projection of the array increases UV coverage
-day = 86400  # Seconds in a day
-rev = 2*np.pi  # 2 pi radians in one revolution of the Earth
-s = rev/day  # Radians per second
+# As the Earth rotates, projection of the array increases UV coverage. This is known as rotation synthesis
+# Hour angle changes though the observation period due to the Earth's Rotation
+# This leads to the formation of elliptical  UV tracks.
 
-cadence = 120  # Interval of consecutive observations in seconds
-angle_int = s*cadence  # Angle interval between observations in Radians
+# Interval of consecutive observations in seconds
+cadence = 120
+# Angle interval between observations in Radians
+angle_int = cadence*((2*np.pi)/(24*60*60))
 
-obs_t = 6  # Total time of observation in hours
+obs_t = 8  # Total time of observation in hours
 obs_time = obs_t*3600  # Total time of observation converted to seconds
-
 n_obs = int(round(obs_time/cadence))  # Number of individual observations
-
-# wavelenght = 1  # Wavelength of observations in meters
 
 declination = 45  # Decliantion of the phase center of the source, in degrees
 dec = np.radians(declination)  # Concert to radians
-
-# Hour angle changes though the observation period due to the Earth's Rotation
-# This leads to the formation of elliptical  UV tracks.
 
 init_hour = -4  # Initial hour angle in hours
 h_0 = np.radians(init_hour*15)  # Initial hour angle in radians
@@ -66,7 +70,7 @@ h = np.array(np.arange(n_obs))*angle_int + h_0
 
 # The xyz matrix represents the position of each baseline.
 # Each column of this matrix represents an individual baseline of the array.
-xyz = np.array(np.vstack((u, v, np.zeros(u.shape[0]))))
+xyz = np.array(np.vstack((lx, ly, lz)))
 uvw = np.empty((3, 0))
 
 # The transformation matrix 't' depends on the declination 'dec' of the source.
@@ -89,37 +93,40 @@ for j in range(len(h)):
 u_rot = np.array(uvw[0]).ravel()
 v_rot = np.array(uvw[1]).ravel()
 
-uvw_0 = uvw[:, :u.shape[0]]
+uvw_0 = uvw[:, :lx.shape[0]]
 
-wavelength = (0.8, 1.2, 1.6, 2.0, 2.4, 2.8)
+# Wavelength dependent beam shape
 
-images = []
-uv_lambda = []
+# wavelength = (0.8, 1.2, 1.6, 2.0, 2.4, 2.8)
 
-for i in wavelength:
-    uvw_lambda = (1/i)*uvw_0
-    u_lambda = np.array(uvw_lambda[0]).ravel()
-    v_lambda = np.array(uvw_lambda[1]).ravel()
-    mask_l = np.zeros(np.shape(vis_img3))
-    mask_l[np.around(v_lambda).astype(np.int)+v_0,
-           np.around(u_lambda).astype(np.int)+u_0] = 1
+# images = []
+# uv_lambda = []
 
-    img_l = np.multiply(vis_img3, mask_l)
-    images.append(abs(np.fft.ifft2(np.fft.fftshift(img_l))))
+# for i in wavelength:
+#     uvw_lambda = (1/i)*uvw_0
+#     u_lambda = np.array(uvw_lambda[0]).ravel()
+#     v_lambda = np.array(uvw_lambda[1]).ravel()
+#     mask_l = np.zeros(np.shape(vis_img3))
+#     mask_l[np.around(v_lambda).astype(np.int)+v_0,
+#            np.around(u_lambda).astype(np.int)+u_0] = 1
 
-    uv = [u_lambda, v_lambda]
-    uv_lambda.append(uv)
+#     img_l = np.multiply(vis_img3, mask_l)
+#     images.append(abs(np.fft.ifft2(np.fft.fftshift(img_l))))
+
+#     uv = [u_lambda, v_lambda]
+#     uv_lambda.append(uv)
 
 
 # Mask to sample visibilites
 mask = np.zeros(np.shape(vis_img))
-mask[u+u_0, v+v_0] = 1
+mask[np.around(lx).astype(np.int)+x_0,
+     np.around(ly).astype(np.int)+y_0] = 1
 dirty_img = abs(np.fft.ifft2(np.fft.fftshift(np.multiply(vis_img1, mask))))
 
 # Mask of Rotation Synthesis
 mask_rot = np.zeros(np.shape(vis_img))
-mask_rot[np.around(u_rot).astype(np.int)+u_0,
-         np.around(v_rot).astype(np.int)+v_0] = 1
+mask_rot[np.around(u_rot).astype(np.int)+x_0,
+         np.around(v_rot).astype(np.int)+y_0] = 1
 dirty_img_rot = abs(np.fft.ifft2(np.fft.fftshift(np.multiply(vis_img2,
                                                              mask_rot))))
 
@@ -127,87 +134,87 @@ dirty_img_rot = abs(np.fft.ifft2(np.fft.fftshift(np.multiply(vis_img2,
 # Plotting images
 plt.style.use('dark_background')
 
-# Plots of UV coverage as a fuction of wavelength
-fig, ((ax0, ax1, ax2), (ax3, ax4, ax5)) = plt.subplots(2, 3, figsize=(14, 7))
+# # Plots of UV coverage as a fuction of wavelength
+# fig, ((ax0, ax1, ax2), (ax3, ax4, ax5)) = plt.subplots(2, 3, figsize=(14, 7))
 
-ax0.plot(uv_lambda[0][0], uv_lambda[0][1], ',', color='white')
-ax0.set_title('Lambda =' + str(wavelength[0]))
-ax0.set_xlim([-256, 256])
-ax0.set_ylim([-256, 256])
-ax0.set_aspect('equal')
-
-
-ax1.plot(uv_lambda[1][0], uv_lambda[1][1], ',', color='white')
-ax1.set_title('Lambda =' + str(wavelength[1]))
-ax1.set_xlim([-256, 256])
-ax1.set_ylim([-256, 256])
-ax1.set_aspect('equal')
+# ax0.plot(uv_lambda[0][0], uv_lambda[0][1], ',', color='white')
+# ax0.set_title('Lambda =' + str(wavelength[0]))
+# ax0.set_xlim([-256, 256])
+# ax0.set_ylim([-256, 256])
+# ax0.set_aspect('equal')
 
 
-ax2.plot(uv_lambda[2][0], uv_lambda[2][1], ',', color='white')
-ax2.set_title('Lambda =' + str(wavelength[2]))
-ax2.set_xlim([-256, 256])
-ax2.set_ylim([-256, 256])
-ax2.set_aspect('equal')
+# ax1.plot(uv_lambda[1][0], uv_lambda[1][1], ',', color='white')
+# ax1.set_title('Lambda =' + str(wavelength[1]))
+# ax1.set_xlim([-256, 256])
+# ax1.set_ylim([-256, 256])
+# ax1.set_aspect('equal')
 
 
-ax3.plot(uv_lambda[3][0], uv_lambda[3][1], ',', color='white')
-ax3.set_title('lambda =' + str(wavelength[3]))
-ax3.set_xlim([-256, 256])
-ax3.set_ylim([-256, 256])
-ax3.set_aspect('equal')
+# ax2.plot(uv_lambda[2][0], uv_lambda[2][1], ',', color='white')
+# ax2.set_title('Lambda =' + str(wavelength[2]))
+# ax2.set_xlim([-256, 256])
+# ax2.set_ylim([-256, 256])
+# ax2.set_aspect('equal')
 
 
-ax4.plot(uv_lambda[4][0], uv_lambda[4][1], ',', color='white')
-ax4.set_title('Lambda =' + str(wavelength[4]))
-ax4.set_xlim([-256, 256])
-ax4.set_ylim([-256, 256])
-ax4.set_aspect('equal')
+# ax3.plot(uv_lambda[3][0], uv_lambda[3][1], ',', color='white')
+# ax3.set_title('lambda =' + str(wavelength[3]))
+# ax3.set_xlim([-256, 256])
+# ax3.set_ylim([-256, 256])
+# ax3.set_aspect('equal')
 
 
-ax5.plot(uv_lambda[5][0], uv_lambda[5][1], ',', color='white')
-ax5.set_title('Lambda =' + str(wavelength[5]))
-ax5.set_xlim([-256, 256])
-ax5.set_ylim([-256, 256])
-ax5.set_aspect('equal')
-
-fig.tight_layout()
+# ax4.plot(uv_lambda[4][0], uv_lambda[4][1], ',', color='white')
+# ax4.set_title('Lambda =' + str(wavelength[4]))
+# ax4.set_xlim([-256, 256])
+# ax4.set_ylim([-256, 256])
+# ax4.set_aspect('equal')
 
 
-# Plots of dirty images (Snapshots, not rotation) as a function of wavelength.
-fig, ((ax0, ax1, ax2), (ax3, ax4, ax5)) = plt.subplots(2, 3, figsize=(14, 7))
+# ax5.plot(uv_lambda[5][0], uv_lambda[5][1], ',', color='white')
+# ax5.set_title('Lambda =' + str(wavelength[5]))
+# ax5.set_xlim([-256, 256])
+# ax5.set_ylim([-256, 256])
+# ax5.set_aspect('equal')
 
-im0 = ax0.imshow(images[0], cmap='magma')
-ax0.set_title('Lambda =' + str(wavelength[0]))
-ax0.set_aspect('equal')
-cbar0 = plt.colorbar(im0, ax=ax0)
+# fig.tight_layout()
 
-im1 = ax1.imshow(images[1], cmap='magma')
-ax1.set_title('Lambda =' + str(wavelength[1]))
-ax1.set_aspect('equal')
-cbar1 = plt.colorbar(im1, ax=ax1)
 
-im2 = ax2.imshow(images[2], cmap='magma')
-ax2.set_title('Lambda =' + str(wavelength[2]))
-ax2.set_aspect('equal')
-cbar2 = plt.colorbar(im2, ax=ax2)
+# # Plots of dirty images (Snapshots, not rotation) as a function of wavelength.
+# fig, ((ax0, ax1, ax2), (ax3, ax4, ax5)) = plt.subplots(2, 3, figsize=(14, 7))
 
-im3 = ax3.imshow(images[3], cmap='magma')
-ax3.set_title('lambda =' + str(wavelength[3]))
-ax3.set_aspect('equal')
-cbar3 = plt.colorbar(im3, ax=ax3)
+# im0 = ax0.imshow(images[0], cmap='magma')
+# ax0.set_title('Lambda =' + str(wavelength[0]))
+# ax0.set_aspect('equal')
+# cbar0 = plt.colorbar(im0, ax=ax0)
 
-im4 = ax4.imshow(images[4], cmap='magma')
-ax4.set_title('Lambda =' + str(wavelength[4]))
-ax4.set_aspect('equal')
-cbar4 = plt.colorbar(im4, ax=ax4)
+# im1 = ax1.imshow(images[1], cmap='magma')
+# ax1.set_title('Lambda =' + str(wavelength[1]))
+# ax1.set_aspect('equal')
+# cbar1 = plt.colorbar(im1, ax=ax1)
 
-im5 = ax5.imshow(images[5], cmap='magma')
-ax5.set_title('Lambda =' + str(wavelength[5]))
-ax5.set_aspect('equal')
-cbar5 = plt.colorbar(im5, ax=ax5)
+# im2 = ax2.imshow(images[2], cmap='magma')
+# ax2.set_title('Lambda =' + str(wavelength[2]))
+# ax2.set_aspect('equal')
+# cbar2 = plt.colorbar(im2, ax=ax2)
 
-fig.tight_layout()
+# im3 = ax3.imshow(images[3], cmap='magma')
+# ax3.set_title('lambda =' + str(wavelength[3]))
+# ax3.set_aspect('equal')
+# cbar3 = plt.colorbar(im3, ax=ax3)
+
+# im4 = ax4.imshow(images[4], cmap='magma')
+# ax4.set_title('Lambda =' + str(wavelength[4]))
+# ax4.set_aspect('equal')
+# cbar4 = plt.colorbar(im4, ax=ax4)
+
+# im5 = ax5.imshow(images[5], cmap='magma')
+# ax5.set_title('Lambda =' + str(wavelength[5]))
+# ax5.set_aspect('equal')
+# cbar5 = plt.colorbar(im5, ax=ax5)
+
+# fig.tight_layout()
 
 
 # Plots of dirty image with and without rotation synthesis.
@@ -244,7 +251,7 @@ fig, (ax1, ax2, ax3) = plt.subplots(nrows=1, ncols=3, figsize=(15, 5))
 ax1.plot(array.E, array.N, ',', color='white')
 ax1.set_title('Array Configuraton')
 ax1.set_aspect('equal')
-ax2.plot(u, v, ',', color='white')
+ax2.plot(lx, ly, ',', color='white')
 ax2.set_title('$UV$ Snapshot')
 ax2.set_aspect('equal')
 ax3.plot(u_rot, v_rot, ',', color='white')
