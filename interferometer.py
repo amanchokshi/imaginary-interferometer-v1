@@ -58,7 +58,8 @@ dec = np.radians(declination)  # Concert to radians
 # Hour angle changes though the observation period due to the Earth's Rotation
 # This leads to the formation of elliptical  UV tracks.
 
-h_0 = 0  # Initial Hour angle in Radians. O represents a source at Zenith
+init_hour = -4  # Initial hour angle in hours
+h_0 = np.radians(init_hour*15)  # Initial hour angle in radians
 
 # List of Hour angle positions for each snapshot
 h = np.array(np.arange(n_obs))*angle_int + h_0
