@@ -4,7 +4,7 @@ import pandas as pd
 from PIL import Image
 
 # The inupt image represents the 'true' sky intensity as a function of position
-img = np.array(Image.open('data/hercules.png').convert("L"))
+img = np.array(Image.open('data/star.png').convert("L"))
 
 
 # Performing a 2D FFT on sky intensity will give us the complex visibilities.
@@ -16,7 +16,7 @@ vis_img2 = np.copy(vis_img)
 vis_img3 = np.copy(vis_img)
 
 # Log transform enables us to view the large dynamic range of visibilities
-vis_img_mag = np.log10(abs(vis_img))
+vis_img_mag = np.log10(np.abs(vis_img))
 
 # The coordinates of the center of image plane.
 [x_0, y_0] = (np.array(np.shape(vis_img))/2).astype(np.int)
@@ -120,15 +120,17 @@ for i in wavelength:
 mask = np.zeros(np.shape(vis_img))
 mask[np.around(lx).astype(np.int)+x_0,
      np.around(ly).astype(np.int)+y_0] = 1
-dirty_img = abs(np.fft.ifft2(np.fft.fftshift(np.multiply(vis_img1, mask))))
+dirty_img = np.abs(np.fft.ifft2(np.fft.fftshift(np.multiply(vis_img1, mask))))
 
 # Mask of Rotation Synthesis
 mask_rot = np.zeros(np.shape(vis_img))
 mask_rot[np.around(u_rot).astype(np.int)+x_0,
          np.around(v_rot).astype(np.int)+y_0] = 1
-dirty_img_rot = abs(np.fft.ifft2(np.fft.fftshift(np.multiply(vis_img2,
-                                                             mask_rot))))
+dirty_img_rot = np.abs(np.fft.ifft2(np.fft.fftshift(np.multiply(vis_img2,
+                                                                mask_rot))))
 
+psf = np.log(np.abs(np.fft.fftshift(np.fft.ifft2(mask)))**2)
+psf_rot = np.log(np.abs(np.fft.fftshift(np.fft.ifft2(mask_rot)))**2)
 
 # Plotting images
 plt.style.use('dark_background')
@@ -229,6 +231,18 @@ ax4.set_aspect('equal')
 cbar4 = plt.colorbar(im4, ax=ax4)
 fig.tight_layout()
 
+# Plots PSF with and without rotation.
+fig, ((ax1, ax2)) = plt.subplots(1, 2, figsize=(11, 4))
+
+im1 = ax1.imshow(psf, cmap='magma')
+ax1.set_title('PSF Snapshot')
+ax1.set_aspect('equal')
+cbar1 = plt.colorbar(im1, ax=ax1)
+im2 = ax2.imshow(psf_rot, cmap='magma')
+ax2.set_title('PSF with Rotation')
+ax2.set_aspect('equal')
+cbar2 = plt.colorbar(im2, ax=ax2)
+fig.tight_layout()
 
 # Plots of original data and visibilities.
 fig, ((ax1, ax2)) = plt.subplots(1, 2, figsize=(11, 4))
@@ -243,9 +257,8 @@ ax2.set_aspect('equal')
 cbar2 = plt.colorbar(im2, ax=ax2)
 fig.tight_layout()
 
-# # Plots of array configurations and UV sampling with and without rotation.
+# Plots of array configurations and UV sampling with and without rotation.
 fig, (ax1, ax2, ax3) = plt.subplots(nrows=1, ncols=3, figsize=(15, 5))
-
 
 ax1.plot(array.E, array.N, ',', color='white')
 ax1.set_title('Array Configuraton')
