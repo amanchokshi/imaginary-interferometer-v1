@@ -248,7 +248,7 @@ fig.tight_layout()
 fig, ((ax1, ax2)) = plt.subplots(1, 2, figsize=(11, 4))
 
 im1 = ax1.imshow(img, cmap='magma')
-ax1.set_title('Hercules A')
+ax1.set_title('Sky')
 ax1.set_aspect('equal')
 cbar1 = plt.colorbar(im1, ax=ax1)
 im2 = ax2.imshow(vis_img_mag, cmap='magma')
@@ -260,13 +260,14 @@ fig.tight_layout()
 # Plots of array configurations and UV sampling with and without rotation.
 fig, (ax1, ax2, ax3) = plt.subplots(nrows=1, ncols=3, figsize=(15, 5))
 
-ax1.plot(array.E, array.N, ',', color='white')
+
+ax1.plot(array.E, array.N, '.', color='white')
 ax1.set_title('Array Configuraton')
 ax1.set_aspect('equal')
 ax1.set_xlim((-x_0/2, x_0/2))
 ax1.set_ylim((-y_0/2, y_0/2))
 ax2.plot(np.concatenate(E - E[:, None]),
-         np.concatenate(N - N[:, None]), ',', color='white')
+         np.concatenate(N - N[:, None]), '.', color='white')
 ax2.set_title('$UV$ Snapshot')
 ax2.set_aspect('equal')
 ax2.set_xlim((-x_0, x_0))
@@ -280,4 +281,4 @@ fig.tight_layout()
 
 plt.show()
 
-#TODO Add argparese functionality
+# TODO Add argparese functionality
