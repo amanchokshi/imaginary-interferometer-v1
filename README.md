@@ -6,8 +6,14 @@ A simulated radio interferometer to build an intuitive understanding of the func
 Let the following image [left] of a star field be our "sky" for the purpose of this excercise.
 
 ![SKY](images/Figure_1.png)
+
+The dirty images produced by the imaginary interferometer, with and without rotation synthesis.
 ![SKY](images/Figure_2.png)
+
+The PSF (Point Spread Function) of the array with and without rotation synthesis.
 ![SKY](images/Figure_3.png)
+
+Array configuration, UV sampling instantaneous snapshot, and UV sampling with rotation synthesis.
 ![SKY](images/Figure_4.png)
 
 
