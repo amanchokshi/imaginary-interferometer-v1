@@ -1,2 +1,10 @@
-# imaginary-interferometer
-Creating a simulated radio interferometer to get an intuitive sense of the functioning of large radio arrays. The main array is modelled after the VLA. There is the possibility to probe the chromatic nature of radio interferometric arrays.
+## Imaginary Interferometer
+A simulated radio interferometer to build an intuitive understanding of the functioning of large radio interferometric arrays.
+
+### Theory
+
+Let the following image [left] of a star field be our "sky" for the purpose of this excercise.
+
+![SKY](images/Figure_1.png)
+
+
