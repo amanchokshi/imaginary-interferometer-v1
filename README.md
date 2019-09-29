@@ -6,5 +6,8 @@ A simulated radio interferometer to build an intuitive understanding of the func
 Let the following image [left] of a star field be our "sky" for the purpose of this excercise.
 
 ![SKY](images/Figure_1.png)
+![SKY](images/Figure_2.png)
+![SKY](images/Figure_3.png)
+![SKY](images/Figure_4.png)
 
 
