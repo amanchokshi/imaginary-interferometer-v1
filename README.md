@@ -17,3 +17,6 @@ Array configuration, UV sampling instantaneous snapshot, and UV sampling with ro
 ![SKY](images/Figure_4.png)
 
 
+### Installation
+
+This code required Python 3.0 or higher. First create a new virtual environment and install all required libraried there.
