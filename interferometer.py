@@ -134,7 +134,7 @@ psf = np.log10(np.abs(np.fft.fftshift(np.fft.ifft2(mask)))**2)
 psf_rot = np.log10(np.abs(np.fft.fftshift(np.fft.ifft2(mask_rot)))**2)
 
 # Plotting images
-#plt.style.use('dark_background')
+plt.style.use('dark_background')
 
 ## plots of uv coverage as a fuction of wavelength
 #fig, ((ax0, ax1, ax2), (ax3, ax4, ax5)) = plt.subplots(2, 3, figsize=(14, 7))
@@ -262,18 +262,18 @@ fig.tight_layout()
 fig, (ax1, ax2, ax3) = plt.subplots(nrows=1, ncols=3, figsize=(15, 5))
 
 
-ax1.plot(array.E, array.N, '.', color='#34495E')
+ax1.plot(array.E, array.N, '.', color='#dadada')
 ax1.set_title('Array Configuraton')
 ax1.set_aspect('equal')
 ax1.set_xlim((-x_0/2, x_0/2))
 ax1.set_ylim((-y_0/2, y_0/2))
 ax2.plot(np.concatenate(E - E[:, None]),
-         np.concatenate(N - N[:, None]), '.', color='#34495E')
+         np.concatenate(N - N[:, None]), '.', color='#dadada')
 ax2.set_title('$UV$ Snapshot')
 ax2.set_aspect('equal')
 ax2.set_xlim((-x_0, x_0))
 ax2.set_ylim((-y_0, y_0))
-ax3.plot(u_rot, v_rot, ',', color='#34495E')
+ax3.plot(u_rot, v_rot, ',', color='#dadada')
 #ax3.plot(u_rot, v_rot, ',', color='white')
 ax3.set_title('$UV$ Rotation Synthesis')
 ax3.set_aspect('equal')
