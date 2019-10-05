@@ -4,8 +4,8 @@ from PIL import Image
 import matplotlib.pyplot as plt
 
 # The inupt image represents the 'true' sky intensity as a function of position
-img = np.array(Image.open('images/star.png').convert("L"))
-#img = np.array(Image.open('data/hercules.png').convert("L"))
+#img = np.array(Image.open('images/star.png').convert("L"))
+img = np.array(Image.open('images/hercules.png').convert("L"))
 
 
 # Performing a 2D FFT on sky intensity will give us the complex visibilities.
@@ -27,7 +27,8 @@ array_latitude = 36
 lat = np.radians(array_latitude)
 # Reads array positions from array.csv file
 # array-vla uses a n^(1.716) power law distribution like the real VLA
-array = pd.read_csv('arrays/array-vla.csv')
+array = pd.read_csv('arrays/vla.csv')
+#array = pd.read_csv('arrays/heliography.csv')
 
 # X,Y coordinates of tiles.
 E = np.array(list(array.E))
