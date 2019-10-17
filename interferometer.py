@@ -3,6 +3,7 @@ import numpy as np
 import pandas as pd
 from PIL import Image
 import matplotlib.pyplot as plt
+#from palettable.matplotlib import Magma_4
 from palettable.colorbrewer.diverging import Spectral_10_r
 
 parser = argparse.ArgumentParser(description="""Code aimed to build an intuitive understanding of the various concepts
@@ -156,6 +157,7 @@ psf_rot = np.log10(np.abs(np.fft.fftshift(np.fft.ifft2(mask_rot)))**2)
 
 # Plotting images
 plt.style.use('dark_background')
+#cmap=Magma_4.mpl_colormap
 cmap=Spectral_10_r.mpl_colormap
 
 ## plots of uv coverage as a fuction of wavelength
