@@ -47,12 +47,7 @@ vis_img_mag = np.log10(np.abs(vis_img))
 array_latitude = int(lat)
 lat = np.radians(array_latitude)
 # Reads array positions from array.csv file
-# array-vla uses a n^(1.716) power law distribution like the real VLA
 array = pd.read_csv('arrays/{}.csv'.format(array))
-#array = pd.read_csv('arrays/meerkat.csv')
-#array = pd.read_csv('arrays/mwa-phase2.csv')
-#array = pd.read_csv('arrays/vla.csv')
-#array = pd.read_csv('arrays/heliography.csv')
 
 # X,Y coordinates of tiles.
 E = np.array(list(array.E))
@@ -154,6 +149,7 @@ mask_rot[np.around(u_rot).astype(np.int)+x_0,
          np.around(v_rot).astype(np.int)+y_0] = 1
 dirty_img_rot = np.abs(np.fft.ifft2(np.fft.fftshift(np.multiply(vis_img2,
                                                                 mask_rot))))
+
 
 psf = np.log10(np.abs(np.fft.fftshift(np.fft.ifft2(mask)))**2)
 psf_rot = np.log10(np.abs(np.fft.fftshift(np.fft.ifft2(mask_rot)))**2)
