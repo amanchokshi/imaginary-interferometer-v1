@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 from PIL import Image
 import matplotlib.pyplot as plt
-
+from palettable.colorbrewer.diverging import Spectral_10_r
 
 parser = argparse.ArgumentParser(description="""Code aimed to build an intuitive understanding of the various concepts
                                                 of radio interferometry. How is the array configuration linked to UV sampling?
@@ -156,6 +156,7 @@ psf_rot = np.log10(np.abs(np.fft.fftshift(np.fft.ifft2(mask_rot)))**2)
 
 # Plotting images
 plt.style.use('dark_background')
+cmap=Spectral_10_r.mpl_colormap
 
 ## plots of uv coverage as a fuction of wavelength
 #fig, ((ax0, ax1, ax2), (ax3, ax4, ax5)) = plt.subplots(2, 3, figsize=(14, 7))
@@ -207,32 +208,32 @@ plt.style.use('dark_background')
 ## Plots of dirty images (Snapshots, not rotation) as a function of wavelength.
 #fig, ((ax0, ax1, ax2), (ax3, ax4, ax5)) = plt.subplots(2, 3, figsize=(14, 7))
 #
-#im0 = ax0.imshow(images[0], cmap='magma')
+#im0 = ax0.imshow(images[0], cmap=cmap)
 #ax0.set_title('Lambda =' + str(wavelength[0]))
 #ax0.set_aspect('equal')
 #cbar0 = plt.colorbar(im0, ax=ax0)
 #
-#im1 = ax1.imshow(images[1], cmap='magma')
+#im1 = ax1.imshow(images[1], cmap=cmap)
 #ax1.set_title('Lambda =' + str(wavelength[1]))
 #ax1.set_aspect('equal')
 #cbar1 = plt.colorbar(im1, ax=ax1)
 #
-#im2 = ax2.imshow(images[2], cmap='magma')
+#im2 = ax2.imshow(images[2], cmap=cmap)
 #ax2.set_title('Lambda =' + str(wavelength[2]))
 #ax2.set_aspect('equal')
 #cbar2 = plt.colorbar(im2, ax=ax2)
 #
-#im3 = ax3.imshow(images[3], cmap='magma')
+#im3 = ax3.imshow(images[3], cmap=cmap)
 #ax3.set_title('lambda =' + str(wavelength[3]))
 #ax3.set_aspect('equal')
 #cbar3 = plt.colorbar(im3, ax=ax3)
 #
-#im4 = ax4.imshow(images[4], cmap='magma')
+#im4 = ax4.imshow(images[4], cmap=cmap)
 #ax4.set_title('Lambda =' + str(wavelength[4]))
 #ax4.set_aspect('equal')
 #cbar4 = plt.colorbar(im4, ax=ax4)
 #
-#im5 = ax5.imshow(images[5], cmap='magma')
+#im5 = ax5.imshow(images[5], cmap=cmap)
 #ax5.set_title('Lambda =' + str(wavelength[5]))
 #ax5.set_aspect('equal')
 #cbar5 = plt.colorbar(im5, ax=ax5)
@@ -242,11 +243,11 @@ plt.style.use('dark_background')
 # Plots of original data and visibilities.
 fig, ((ax1, ax2)) = plt.subplots(1, 2, figsize=(15, 5))
 
-im1 = ax1.imshow(img, cmap='YlGnBu_r')
+im1 = ax1.imshow(img, cmap=cmap)
 ax1.set_title('Sky')
 ax1.set_aspect('equal')
 cbar1 = plt.colorbar(im1, ax=ax1)
-im2 = ax2.imshow(vis_img_mag, cmap='YlGnBu_r')
+im2 = ax2.imshow(vis_img_mag,cmap=cmap)
 ax2.set_title('Visibility Amplitudes')
 ax2.set_aspect('equal')
 cbar2 = plt.colorbar(im2, ax=ax2)
@@ -256,11 +257,11 @@ fig.tight_layout()
 # Plots of dirty image with and without rotation synthesis.
 fig, ((ax3, ax4)) = plt.subplots(1, 2, figsize=(15, 5))
 
-im3 = ax3.imshow(dirty_img, cmap='YlGnBu_r')
+im3 = ax3.imshow(dirty_img, cmap=cmap)
 ax3.set_title('Dirty Image')
 ax3.set_aspect('equal')
 cbar3 = plt.colorbar(im3, ax=ax3)
-im4 = ax4.imshow(dirty_img_rot, cmap='YlGnBu_r')
+im4 = ax4.imshow(dirty_img_rot, cmap=cmap)
 ax4.set_title('Dirty Image + Rotation Synthesis')
 ax4.set_aspect('equal')
 cbar4 = plt.colorbar(im4, ax=ax4)
@@ -269,11 +270,11 @@ fig.tight_layout()
 # Plots PSF with and without rotation.
 fig, ((ax1, ax2)) = plt.subplots(1, 2, figsize=(15, 5))
 
-im1 = ax1.imshow(psf, cmap='YlGnBu_r')
+im1 = ax1.imshow(psf, cmap=cmap)
 ax1.set_title('PSF Snapshot')
 ax1.set_aspect('equal')
 cbar1 = plt.colorbar(im1, ax=ax1)
-im2 = ax2.imshow(psf_rot, cmap='YlGnBu_r')
+im2 = ax2.imshow(psf_rot, cmap=cmap)
 ax2.set_title('PSF with Rotation')
 ax2.set_aspect('equal')
 cbar2 = plt.colorbar(im2, ax=ax2)
@@ -295,7 +296,6 @@ ax2.set_aspect('equal')
 ax2.set_xlim((-x_0, x_0))
 ax2.set_ylim((-y_0, y_0))
 ax3.plot(u_rot, v_rot, ',', color='#dadada')
-#ax3.plot(u_rot, v_rot, ',', color='white')
 ax3.set_title('$UV$ Rotation Synthesis')
 ax3.set_aspect('equal')
 ax3.set_xlim((-x_0, x_0))
