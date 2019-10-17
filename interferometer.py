@@ -242,11 +242,11 @@ plt.style.use('dark_background')
 # Plots of original data and visibilities.
 fig, ((ax1, ax2)) = plt.subplots(1, 2, figsize=(15, 5))
 
-im1 = ax1.imshow(img, cmap='magma')
+im1 = ax1.imshow(img, cmap='YlGnBu_r')
 ax1.set_title('Sky')
 ax1.set_aspect('equal')
 cbar1 = plt.colorbar(im1, ax=ax1)
-im2 = ax2.imshow(vis_img_mag, cmap='magma')
+im2 = ax2.imshow(vis_img_mag, cmap='YlGnBu_r')
 ax2.set_title('Visibility Amplitudes')
 ax2.set_aspect('equal')
 cbar2 = plt.colorbar(im2, ax=ax2)
@@ -256,11 +256,11 @@ fig.tight_layout()
 # Plots of dirty image with and without rotation synthesis.
 fig, ((ax3, ax4)) = plt.subplots(1, 2, figsize=(15, 5))
 
-im3 = ax3.imshow(dirty_img, cmap='magma')
+im3 = ax3.imshow(dirty_img, cmap='YlGnBu_r')
 ax3.set_title('Dirty Image')
 ax3.set_aspect('equal')
 cbar3 = plt.colorbar(im3, ax=ax3)
-im4 = ax4.imshow(dirty_img_rot, cmap='magma')
+im4 = ax4.imshow(dirty_img_rot, cmap='YlGnBu_r')
 ax4.set_title('Dirty Image + Rotation Synthesis')
 ax4.set_aspect('equal')
 cbar4 = plt.colorbar(im4, ax=ax4)
@@ -269,11 +269,11 @@ fig.tight_layout()
 # Plots PSF with and without rotation.
 fig, ((ax1, ax2)) = plt.subplots(1, 2, figsize=(15, 5))
 
-im1 = ax1.imshow(psf, cmap='magma')
+im1 = ax1.imshow(psf, cmap='YlGnBu_r')
 ax1.set_title('PSF Snapshot')
 ax1.set_aspect('equal')
 cbar1 = plt.colorbar(im1, ax=ax1)
-im2 = ax2.imshow(psf_rot, cmap='magma')
+im2 = ax2.imshow(psf_rot, cmap='YlGnBu_r')
 ax2.set_title('PSF with Rotation')
 ax2.set_aspect('equal')
 cbar2 = plt.colorbar(im2, ax=ax2)
@@ -304,4 +304,3 @@ fig.tight_layout()
 
 plt.show()
 
-# TODO Add argparese functionality
