@@ -9,11 +9,23 @@ Clone this repository into a directory of your choice.
 cd ~\Documents
 git clone https://github.com/amanchokshi/imaginary-interferometer.git
 cd imaginary-interferometer
+source setup.sh
+```
 
+`source setup.sh` creates a python virtual environment called `venv`, activates it, and installs all the required packages.  
+
+To get and idea of the options available:
+```
+python interferometer.py --help
+```
+
+The Imaginary Inteferometer can be run with its default settings with:  
+```
 python interferometer.py
 ```
 
-See all the options with `python interferometer.py --help`  
+To deactivate the python virtual environment, type `deactivate` in your terminal.   
+
 
 The code has a lot of comments which will help you understand the fundamentals of interferometry. You can add new images to the `images` directory, but the must be `512x512` pixels in dimension. Images can be used with the `--image` flag. New arrays can be defined in the `array` directory, and used with the `--array` flag.
 
