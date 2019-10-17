@@ -1,12 +1,33 @@
+import argparse
 import numpy as np
 import pandas as pd
 from PIL import Image
 import matplotlib.pyplot as plt
 
-# The inupt image represents the 'true' sky intensity as a function of position
-#img = np.array(Image.open('images/star.png').convert("L"))
-img = np.array(Image.open('images/hercules.png').convert("L"))
 
+parser = argparse.ArgumentParser(description="""Code aimed to build an intuitive understanding of the various concepts
+                                                of radio interferometry. How is the array configuration linked to UV sampling?
+                                                What is Earth rotation synthesis and how can it be used to inprove UV coverage?
+                                                What is PSF is the context of radio interferometry? 
+
+                                                I have also included array configurations of some famous radio telescopes.
+                                                """)
+parser.add_argument('--array', metavar='\b', default='vla', help='Arrays: vla, askap, meetkat, heliograph, mwa-phase2')
+parser.add_argument('--image', metavar='\b', default='star', help='Sky image: star or hercules')
+parser.add_argument('--lattitude', metavar='\b', default=36, help='The lattitude of the array')
+parser.add_argument('--integration', metavar='\b', default=8, help='Total integration for Earth Rotation')
+parser.add_argument('--declination', metavar='\b', default=45, help='Declination of phase center of source')
+
+
+args = parser.parse_args()
+array = args.array
+img = args.image
+lat = args.lattitude
+integration = args.integration
+dec = args.declination
+
+# The inupt image represents the 'true' sky intensity as a function of position
+img = np.array(Image.open('images/{}.png'.format(img)).convert("L"))
 
 # Performing a 2D FFT on sky intensity will give us the complex visibilities.
 # fftshift shifts the zero frequency components to the center of the image.
@@ -23,11 +44,11 @@ vis_img_mag = np.log10(np.abs(vis_img))
 [x_0, y_0] = (np.array(np.shape(vis_img))/2).astype(np.int)
 [x_m, y_m] = np.array(np.shape(vis_img)).astype(np.int)
 
-array_latitude = 36
+array_latitude = int(lat)
 lat = np.radians(array_latitude)
 # Reads array positions from array.csv file
 # array-vla uses a n^(1.716) power law distribution like the real VLA
-array = pd.read_csv('arrays/askap.csv')
+array = pd.read_csv('arrays/{}.csv'.format(array))
 #array = pd.read_csv('arrays/meerkat.csv')
 #array = pd.read_csv('arrays/mwa-phase2.csv')
 #array = pd.read_csv('arrays/vla.csv')
@@ -61,11 +82,11 @@ cadence = 120
 # Angle interval between observations in Radians
 angle_int = cadence*((2*np.pi)/(24*60*60))
 
-obs_t = 8  # Total time of observation in hours
+obs_t = int(integration)  # Total time of observation in hours
 obs_time = obs_t*3600  # Total time of observation converted to seconds
 n_obs = int(round(obs_time/cadence))  # Number of individual observations
 
-declination = 45  # Decliantion of the phase center of the source, in degrees
+declination = int(dec)  # Decliantion of the phase center of the source, in degrees
 dec = np.radians(declination)  # Concert to radians
 
 init_hour = -(obs_t/2)  # Initial hour angle in hours
