@@ -3,8 +3,9 @@ import numpy as np
 import pandas as pd
 from PIL import Image
 import matplotlib.pyplot as plt
-#from palettable.matplotlib import Magma_4
-from palettable.colorbrewer.diverging import Spectral_10_r
+from matplotlib import cm
+from matplotlib.colors import ListedColormap, LinearSegmentedColormap
+from scipy.interpolate import interp1d
 
 parser = argparse.ArgumentParser(description="""Code aimed to build an intuitive understanding of the various concepts
                                                 of radio interferometry. How is the array configuration linked to UV sampling?
@@ -39,7 +40,7 @@ vis_img2 = np.copy(vis_img)
 vis_img3 = np.copy(vis_img)
 
 # Log transform enables us to view the large dynamic range of visibilities
-vis_img_mag = np.log10(np.abs(vis_img))
+vis_img_mag = (np.abs(vis_img))**0.2
 
 # The coordinates of the center of image plane.
 [x_0, y_0] = (np.array(np.shape(vis_img))/2).astype(np.int)
@@ -152,13 +153,39 @@ dirty_img_rot = np.abs(np.fft.ifft2(np.fft.fftshift(np.multiply(vis_img2,
                                                                 mask_rot))))
 
 
-psf = np.log10(np.abs(np.fft.fftshift(np.fft.ifft2(mask)))**2)
-psf_rot = np.log10(np.abs(np.fft.fftshift(np.fft.ifft2(mask_rot)))**2)
+psf = np.cbrt(np.abs(np.fft.fftshift(np.fft.ifft2(mask))))
+psf_rot = (np.abs(np.fft.fftshift(np.fft.ifft2(mask_rot)))**0.18)
+
+# Custom colorpmap
+
+A=np.array([219/256, 55/256, 55/256, 1])
+B=np.array([230/256, 75/256, 60/256, 1])
+C=np.array([244/256, 109/256, 67/256, 1])
+D=np.array([253/256, 174/256, 97/256, 1])
+E=np.array([254/256, 224/256, 139/256, 1])
+F=np.array([230/256, 245/256, 152/256, 1])
+G=np.array([171/256, 221/256, 164/256, 1])
+H=np.array([102/256, 194/256, 165/256, 1])
+I=np.array([50/256, 136/256, 189/256, 1])
+J=np.array([94/256, 79/256, 162/256, 1])
+K=np.array([46/256, 67/256, 92/256, 1])
+L=np.array([38/256, 42/256, 77/256, 1])
+M=np.array([37/256, 43/256, 61/256, 1])
+N=np.array([33/256, 38/256, 51/256, 1])
+
+ncmap = [N, M, L, K, J, I, H, G, F, E, D, C, B, A]
+c_array = []
+
+for i in range(len(ncmap)):
+    if i != len(ncmap)-1:
+        linfit = interp1d([1,256], np.vstack([ncmap[i], ncmap[i+1]]), axis=0)
+        for j in range(255):
+            c_array.append(linfit(j+1))
+
+cmap = ListedColormap(c_array)
 
 # Plotting images
 plt.style.use('dark_background')
-#cmap=Magma_4.mpl_colormap
-cmap=Spectral_10_r.mpl_colormap
 
 ## plots of uv coverage as a fuction of wavelength
 #fig, ((ax0, ax1, ax2), (ax3, ax4, ax5)) = plt.subplots(2, 3, figsize=(14, 7))
@@ -249,6 +276,7 @@ im1 = ax1.imshow(img, cmap=cmap)
 ax1.set_title('Sky')
 ax1.set_aspect('equal')
 cbar1 = plt.colorbar(im1, ax=ax1)
+
 im2 = ax2.imshow(vis_img_mag,cmap=cmap)
 ax2.set_title('Visibility Amplitudes')
 ax2.set_aspect('equal')
@@ -259,11 +287,12 @@ fig.tight_layout()
 # Plots of dirty image with and without rotation synthesis.
 fig, ((ax3, ax4)) = plt.subplots(1, 2, figsize=(15, 5))
 
-im3 = ax3.imshow(dirty_img, cmap=cmap)
+im3 = ax3.imshow((dirty_img)**1.2, cmap=cmap)
 ax3.set_title('Dirty Image')
 ax3.set_aspect('equal')
 cbar3 = plt.colorbar(im3, ax=ax3)
-im4 = ax4.imshow(dirty_img_rot, cmap=cmap)
+
+im4 = ax4.imshow((dirty_img_rot)**0.8, cmap=cmap)
 ax4.set_title('Dirty Image + Rotation Synthesis')
 ax4.set_aspect('equal')
 cbar4 = plt.colorbar(im4, ax=ax4)
@@ -276,6 +305,7 @@ im1 = ax1.imshow(psf, cmap=cmap)
 ax1.set_title('PSF Snapshot')
 ax1.set_aspect('equal')
 cbar1 = plt.colorbar(im1, ax=ax1)
+
 im2 = ax2.imshow(psf_rot, cmap=cmap)
 ax2.set_title('PSF with Rotation')
 ax2.set_aspect('equal')
@@ -291,12 +321,15 @@ ax1.set_title('Array Configuraton')
 ax1.set_aspect('equal')
 ax1.set_xlim((-x_0/2, x_0/2))
 ax1.set_ylim((-y_0/2, y_0/2))
-ax2.plot(np.concatenate(E - E[:, None]),
-         np.concatenate(N - N[:, None]), '.', color='#dadada')
+
+#ax2.plot(np.concatenate(E - E[:, None]),
+#         np.concatenate(N - N[:, None]), '.', color='#dadada')
+ax2.plot(lx, ly, '.', color='#dadada')
 ax2.set_title('$UV$ Snapshot')
 ax2.set_aspect('equal')
 ax2.set_xlim((-x_0, x_0))
 ax2.set_ylim((-y_0, y_0))
+
 ax3.plot(u_rot, v_rot, ',', color='#dadada')
 ax3.set_title('$UV$ Rotation Synthesis')
 ax3.set_aspect('equal')
