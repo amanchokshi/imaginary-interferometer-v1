@@ -270,69 +270,90 @@ plt.style.use('dark_background')
 #fig.tight_layout()
 
 # Plots of original data and visibilities.
-fig, ((ax1, ax2)) = plt.subplots(1, 2, figsize=(15, 5))
+fig, ((ax1, ax2)) = plt.subplots(1, 2, figsize=(15, 6.5))
 
 im1 = ax1.imshow(img, cmap=cmap)
 ax1.set_title('Sky')
 ax1.set_aspect('equal')
-cbar1 = plt.colorbar(im1, ax=ax1)
+ax1.axes.get_xaxis().set_visible(False)
+ax1.axes.get_yaxis().set_visible(False)
+#cbar1 = plt.colorbar(im1, ax=ax1)
 
 im2 = ax2.imshow(vis_img_mag,cmap=cmap)
 ax2.set_title('Visibility Amplitudes')
 ax2.set_aspect('equal')
-cbar2 = plt.colorbar(im2, ax=ax2)
+#cbar2 = plt.colorbar(im2, ax=ax2)
+ax2.axes.get_xaxis().set_visible(False)
+ax2.axes.get_yaxis().set_visible(False)
 fig.tight_layout()
 
 
 # Plots of dirty image with and without rotation synthesis.
-fig, ((ax3, ax4)) = plt.subplots(1, 2, figsize=(15, 5))
+fig, ((ax3, ax4)) = plt.subplots(1, 2, figsize=(15, 6.5))
 
 im3 = ax3.imshow((dirty_img)**1.2, cmap=cmap)
 ax3.set_title('Dirty Image')
 ax3.set_aspect('equal')
-cbar3 = plt.colorbar(im3, ax=ax3)
+ax3.axes.get_xaxis().set_visible(False)
+ax3.axes.get_yaxis().set_visible(False)
+#cbar3 = plt.colorbar(im3, ax=ax3)
 
 im4 = ax4.imshow((dirty_img_rot)**0.8, cmap=cmap)
 ax4.set_title('Dirty Image + Rotation Synthesis')
 ax4.set_aspect('equal')
-cbar4 = plt.colorbar(im4, ax=ax4)
+ax4.axes.get_xaxis().set_visible(False)
+ax4.axes.get_yaxis().set_visible(False)
+#cbar4 = plt.colorbar(im4, ax=ax4)
 fig.tight_layout()
 
 # Plots PSF with and without rotation.
-fig, ((ax1, ax2)) = plt.subplots(1, 2, figsize=(15, 5))
+fig, ((ax1, ax2)) = plt.subplots(1, 2, figsize=(15, 6.5))
 
 im1 = ax1.imshow(psf, cmap=cmap)
 ax1.set_title('PSF Snapshot')
 ax1.set_aspect('equal')
-cbar1 = plt.colorbar(im1, ax=ax1)
+ax1.axes.get_xaxis().set_visible(False)
+ax1.axes.get_yaxis().set_visible(False)
+#cbar1 = plt.colorbar(im1, ax=ax1)
 
 im2 = ax2.imshow(psf_rot, cmap=cmap)
 ax2.set_title('PSF with Rotation')
 ax2.set_aspect('equal')
-cbar2 = plt.colorbar(im2, ax=ax2)
+ax2.axes.get_xaxis().set_visible(False)
+ax2.axes.get_yaxis().set_visible(False)
+#cbar2 = plt.colorbar(im2, ax=ax2)
 fig.tight_layout()
 
 # Plots of array configurations and UV sampling with and without rotation.
 fig, (ax1, ax2, ax3) = plt.subplots(nrows=1, ncols=3, figsize=(15, 5))
 
 
-ax1.plot(array.E, array.N, '.', color='#dadada')
+ax1.plot(array.E, array.N, '.', color='#c1e59e', alpha=0.4)
 ax1.set_title('Array Configuraton')
 ax1.set_aspect('equal')
+ax1.set_facecolor('#202532')
+#ax1.axes.get_xaxis().set_visible(False)
+#ax1.axes.get_yaxis().set_visible(False)
 ax1.set_xlim((-x_0/2, x_0/2))
 ax1.set_ylim((-y_0/2, y_0/2))
 
 #ax2.plot(np.concatenate(E - E[:, None]),
 #         np.concatenate(N - N[:, None]), '.', color='#dadada')
-ax2.plot(lx, ly, '.', color='#dadada')
+ax2.plot(lx, ly, '.', color='#c1e59e', alpha=0.2)
 ax2.set_title('$UV$ Snapshot')
 ax2.set_aspect('equal')
+ax2.set_facecolor('#202532')
+#ax2.axes.get_xaxis().set_visible(False)
+#ax2.axes.get_yaxis().set_visible(False)
 ax2.set_xlim((-x_0, x_0))
 ax2.set_ylim((-y_0, y_0))
 
-ax3.plot(u_rot, v_rot, ',', color='#dadada')
+ax3.plot(u_rot, v_rot, ',', color='#c1e59e', alpha=0.1)
 ax3.set_title('$UV$ Rotation Synthesis')
 ax3.set_aspect('equal')
+ax3.set_facecolor('#202532')
+#ax3.axes.get_xaxis().set_visible(False)
+#ax3.axes.get_yaxis().set_visible(False)
 ax3.set_xlim((-x_0, x_0))
 ax3.set_ylim((-y_0, y_0))
 fig.tight_layout()
