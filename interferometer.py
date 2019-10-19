@@ -39,7 +39,7 @@ vis_img1 = np.copy(vis_img)
 vis_img2 = np.copy(vis_img)
 vis_img3 = np.copy(vis_img)
 
-# Log transform enables us to view the large dynamic range of visibilities
+# Vis^0.08 enables us to view the large dynamic range of visibilities
 vis_img_mag = (np.abs(vis_img))**0.08
 
 # The coordinates of the center of image plane.
@@ -84,7 +84,7 @@ obs_time = obs_t*3600  # Total time of observation converted to seconds
 n_obs = int(round(obs_time/cadence))  # Number of individual observations
 
 declination = int(dec)  # Decliantion of the phase center of the source, in degrees
-dec = np.radians(declination)  # Concert to radians
+dec = np.radians(declination)  # Convert to radians
 
 init_hour = -(obs_t/2)  # Initial hour angle in hours
 h_0 = np.radians(init_hour*15)  # Initial hour angle in radians
