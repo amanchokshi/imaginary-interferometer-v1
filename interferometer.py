@@ -1,11 +1,11 @@
 import argparse
 import numpy as np
 import pandas as pd
-from PIL import Image
 import matplotlib.pyplot as plt
-from matplotlib import cm
-from matplotlib.colors import ListedColormap, LinearSegmentedColormap
-from scipy.interpolate import interp1d
+
+from PIL import Image
+from colormap import spectral
+
 
 parser = argparse.ArgumentParser(description="""Code aimed to build an intuitive understanding of the various concepts
                                                 of radio interferometry. How is the array configuration linked to UV sampling?
@@ -156,33 +156,8 @@ dirty_img_rot = np.abs(np.fft.ifft2(np.fft.fftshift(np.multiply(vis_img2,
 psf = np.cbrt(np.abs(np.fft.fftshift(np.fft.ifft2(mask))))
 psf_rot = (np.abs(np.fft.fftshift(np.fft.ifft2(mask_rot)))**0.18)
 
-# Custom colorpmap
-
-A=np.array([219/256, 55/256, 55/256, 1])
-B=np.array([230/256, 75/256, 60/256, 1])
-C=np.array([244/256, 109/256, 67/256, 1])
-D=np.array([253/256, 174/256, 97/256, 1])
-E=np.array([254/256, 224/256, 139/256, 1])
-F=np.array([230/256, 245/256, 152/256, 1])
-G=np.array([171/256, 221/256, 164/256, 1])
-H=np.array([102/256, 194/256, 165/256, 1])
-I=np.array([50/256, 136/256, 189/256, 1])
-J=np.array([94/256, 79/256, 162/256, 1])
-K=np.array([46/256, 67/256, 92/256, 1])
-L=np.array([38/256, 42/256, 77/256, 1])
-M=np.array([37/256, 43/256, 61/256, 1])
-N=np.array([33/256, 38/256, 51/256, 1])
-
-ncmap = [N, M, L, K, J, I, H, G, F, E, D, C, B, A]
-c_array = []
-
-for i in range(len(ncmap)):
-    if i != len(ncmap)-1:
-        linfit = interp1d([1,256], np.vstack([ncmap[i], ncmap[i+1]]), axis=0)
-        for j in range(255):
-            c_array.append(linfit(j+1))
-
-cmap = ListedColormap(c_array)
+# Custom spectal colorpmap
+cmap = spectral()
 
 # Plotting images
 plt.style.use('dark_background')
@@ -331,7 +306,7 @@ fig, (ax1, ax2, ax3) = plt.subplots(nrows=1, ncols=3, figsize=(15, 5))
 ax1.plot(array.E, array.N, '.', color='#c1e59e', alpha=0.4)
 ax1.set_title('Array Configuraton')
 ax1.set_aspect('equal')
-ax1.set_facecolor('#202532')
+ax1.set_facecolor('#1c1e24')
 #ax1.axes.get_xaxis().set_visible(False)
 #ax1.axes.get_yaxis().set_visible(False)
 ax1.set_xlim((-x_0/2, x_0/2))
@@ -342,7 +317,7 @@ ax1.set_ylim((-y_0/2, y_0/2))
 ax2.plot(lx, ly, '.', color='#c1e59e', alpha=0.2)
 ax2.set_title('$UV$ Snapshot')
 ax2.set_aspect('equal')
-ax2.set_facecolor('#202532')
+ax2.set_facecolor('#1c1e24')
 #ax2.axes.get_xaxis().set_visible(False)
 #ax2.axes.get_yaxis().set_visible(False)
 ax2.set_xlim((-x_0, x_0))
@@ -351,7 +326,7 @@ ax2.set_ylim((-y_0, y_0))
 ax3.plot(u_rot, v_rot, ',', color='#c1e59e', alpha=0.1)
 ax3.set_title('$UV$ Rotation Synthesis')
 ax3.set_aspect('equal')
-ax3.set_facecolor('#202532')
+ax3.set_facecolor('#1c1e24')
 #ax3.axes.get_xaxis().set_visible(False)
 #ax3.axes.get_yaxis().set_visible(False)
 ax3.set_xlim((-x_0, x_0))
