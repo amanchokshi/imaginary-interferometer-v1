@@ -270,7 +270,7 @@ plt.style.use('dark_background')
 #fig.tight_layout()
 
 # Plots of original data and visibilities.
-fig, ((ax1, ax2)) = plt.subplots(1, 2, figsize=(15, 6.5))
+fig, ((ax1, ax2)) = plt.subplots(1, 2, figsize=(15, 6))
 
 im1 = ax1.imshow(img, cmap=cmap)
 ax1.set_title('Sky')
@@ -289,7 +289,7 @@ fig.tight_layout()
 
 
 # Plots of dirty image with and without rotation synthesis.
-fig, ((ax3, ax4)) = plt.subplots(1, 2, figsize=(15, 6.5))
+fig, ((ax3, ax4)) = plt.subplots(1, 2, figsize=(15, 6))
 
 im3 = ax3.imshow((dirty_img)**1.2, cmap=cmap)
 ax3.set_title('Dirty Image')
@@ -307,7 +307,7 @@ ax4.axes.get_yaxis().set_visible(False)
 fig.tight_layout()
 
 # Plots PSF with and without rotation.
-fig, ((ax1, ax2)) = plt.subplots(1, 2, figsize=(15, 6.5))
+fig, ((ax1, ax2)) = plt.subplots(1, 2, figsize=(15, 6))
 
 im1 = ax1.imshow(psf, cmap=cmap)
 ax1.set_title('PSF Snapshot')
