@@ -15,7 +15,7 @@ parser = argparse.ArgumentParser(description="""Code aimed to build an intuitive
                                                 I have also included array configurations of some famous radio telescopes.
                                                 """)
 parser.add_argument('--array', metavar='\b', default='vla', help='Arrays: vla, askap, meetkat, heliograph, mwa-phase2')
-parser.add_argument('--image', metavar='\b', default='star', help='Sky image: star or hercules')
+parser.add_argument('--image', metavar='\b', default='star', help='Sky image: star, hercules or fornax')
 parser.add_argument('--lattitude', metavar='\b', default=36, help='The lattitude of the array')
 parser.add_argument('--integration', metavar='\b', default=8, help='Total integration for Earth Rotation')
 parser.add_argument('--declination', metavar='\b', default=45, help='Declination of phase center of source')
