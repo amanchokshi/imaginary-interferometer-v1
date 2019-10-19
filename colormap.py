@@ -21,8 +21,10 @@ def spectral():
     L=np.array([38/256, 42/256, 77/256, 1])
     M=np.array([37/256, 43/256, 61/256, 1])
     N=np.array([33/256, 38/256, 51/256, 1])
+    O=np.array([32/256, 35/256, 43/256, 1])
+    P=np.array([28/256, 30/256, 36/256, 1])
     
-    ncmap = [N, M, L, K, J, I, H, G, F, E, D, C, B, A]
+    ncmap = [P, O, N, M, L, K, J, I, H, G, F, E, D, C, B, A]
     c_array = []
     
     for i in range(len(ncmap)):
