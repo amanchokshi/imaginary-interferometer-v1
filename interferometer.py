@@ -2,6 +2,7 @@ import argparse
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+from matplotlib.font_manager import FontProperties
 
 from PIL import Image
 from colormap import spectral
@@ -23,13 +24,13 @@ parser.add_argument('--declination', metavar='\b', default=45, help='Declination
 
 args = parser.parse_args()
 array = args.array
-img = args.image
+im = args.image
 lat = args.lattitude
 integration = args.integration
 dec = args.declination
 
 # The inupt image represents the 'true' sky intensity as a function of position
-img = np.array(Image.open('images/{}.png'.format(img)).convert("L"))
+img = np.array(Image.open('images/{}.png'.format(im)).convert("L"))
 
 # Performing a 2D FFT on sky intensity will give us the complex visibilities.
 # fftshift shifts the zero frequency components to the center of the image.
@@ -162,6 +163,11 @@ cmap = spectral()
 # Plotting images
 plt.style.use('dark_background')
 
+font = FontProperties()
+font.set_family('sans-serif')
+font.set_name('monospace')
+font.set_size('x-large')
+
 ## plots of uv coverage as a fuction of wavelength
 #fig, ((ax0, ax1, ax2), (ax3, ax4, ax5)) = plt.subplots(2, 3, figsize=(14, 7))
 #
@@ -248,14 +254,14 @@ plt.style.use('dark_background')
 fig, ((ax1, ax2)) = plt.subplots(1, 2, figsize=(15, 6))
 
 im1 = ax1.imshow(img, cmap=cmap)
-ax1.set_title('Sky')
+ax1.set_title('Sky Model: {}'.format(im), fontproperties=font)
 ax1.set_aspect('equal')
 ax1.axes.get_xaxis().set_visible(False)
 ax1.axes.get_yaxis().set_visible(False)
 #cbar1 = plt.colorbar(im1, ax=ax1)
 
 im2 = ax2.imshow(vis_img_mag,cmap=cmap)
-ax2.set_title('Visibility Amplitudes')
+ax2.set_title('Visibility Amplitudes', fontproperties=font)
 ax2.set_aspect('equal')
 #cbar2 = plt.colorbar(im2, ax=ax2)
 ax2.axes.get_xaxis().set_visible(False)
@@ -266,15 +272,15 @@ fig.tight_layout()
 # Plots of dirty image with and without rotation synthesis.
 fig, ((ax3, ax4)) = plt.subplots(1, 2, figsize=(15, 6))
 
-im3 = ax3.imshow((dirty_img)**1.2, cmap=cmap)
-ax3.set_title('Dirty Image')
+im3 = ax3.imshow((dirty_img)**1.4, cmap=cmap)
+ax3.set_title('Dirty Image', fontproperties=font)
 ax3.set_aspect('equal')
 ax3.axes.get_xaxis().set_visible(False)
 ax3.axes.get_yaxis().set_visible(False)
 #cbar3 = plt.colorbar(im3, ax=ax3)
 
-im4 = ax4.imshow((dirty_img_rot)**0.8, cmap=cmap)
-ax4.set_title('Dirty Image + Rotation Synthesis')
+im4 = ax4.imshow((dirty_img_rot)**0.65, cmap=cmap) #0.8
+ax4.set_title('Rotation Synthesis: {} Hours'.format(integration), fontproperties=font)
 ax4.set_aspect('equal')
 ax4.axes.get_xaxis().set_visible(False)
 ax4.axes.get_yaxis().set_visible(False)
@@ -285,14 +291,14 @@ fig.tight_layout()
 fig, ((ax1, ax2)) = plt.subplots(1, 2, figsize=(15, 6))
 
 im1 = ax1.imshow(psf, cmap=cmap)
-ax1.set_title('PSF Snapshot')
+ax1.set_title('PSF Snapshot', fontproperties=font)
 ax1.set_aspect('equal')
 ax1.axes.get_xaxis().set_visible(False)
 ax1.axes.get_yaxis().set_visible(False)
 #cbar1 = plt.colorbar(im1, ax=ax1)
 
 im2 = ax2.imshow(psf_rot, cmap=cmap)
-ax2.set_title('PSF with Rotation')
+ax2.set_title('PSF with Rotation: {} Hours'.format(integration), fontproperties=font)
 ax2.set_aspect('equal')
 ax2.axes.get_xaxis().set_visible(False)
 ax2.axes.get_yaxis().set_visible(False)
@@ -303,30 +309,30 @@ fig.tight_layout()
 fig, (ax1, ax2, ax3) = plt.subplots(nrows=1, ncols=3, figsize=(15, 5))
 
 
-ax1.plot(array.E, array.N, '.', color='#9bd6a2', alpha=0.6)
-ax1.set_title('Array Configuraton')
+ax1.plot(array.E, array.N, '.', color='#e7e6e1', alpha=0.6)
+ax1.set_title('Array Configuraton', fontproperties=font)
 ax1.set_aspect('equal')
-ax1.set_facecolor('#1b1d23')
+ax1.set_facecolor('#0b1016')
 #ax1.axes.get_xaxis().set_visible(False)
 #ax1.axes.get_yaxis().set_visible(False)
 ax1.set_xlim((-x_0/2, x_0/2))
-ax1.set_ylim((-y_0/2, y_0/2))
+ax1.set_ylim((-(y_0/2+5), (y_0/2-5)))
 
 #ax2.plot(np.concatenate(E - E[:, None]),
 #         np.concatenate(N - N[:, None]), '.', color='#dadada')
-ax2.plot(lx, ly, '.', color='#9bd6a2', alpha=0.3)
-ax2.set_title('$UV$ Snapshot')
+ax2.plot(lx, ly, '.', color='#e7e6e1', alpha=0.3)
+ax2.set_title('UV Snapshot', fontproperties=font)
 ax2.set_aspect('equal')
-ax2.set_facecolor('#1b1d23')
+ax2.set_facecolor('#0b1016')
 #ax2.axes.get_xaxis().set_visible(False)
 #ax2.axes.get_yaxis().set_visible(False)
 ax2.set_xlim((-x_0, x_0))
 ax2.set_ylim((-y_0, y_0))
 
-ax3.plot(u_rot, v_rot, ',', color='#9bd6a2', alpha=0.1)
-ax3.set_title('$UV$ Rotation Synthesis')
+ax3.plot(u_rot, v_rot, ',', color='#e7e6e1', alpha=0.2)
+ax3.set_title('UV Rotation Synthesis: {} Hours'.format(integration), fontproperties=font)
 ax3.set_aspect('equal')
-ax3.set_facecolor('#1b1d23')
+ax3.set_facecolor('#0b1016')
 #ax3.axes.get_xaxis().set_visible(False)
 #ax3.axes.get_yaxis().set_visible(False)
 ax3.set_xlim((-x_0, x_0))
