@@ -40,7 +40,7 @@ vis_img2 = np.copy(vis_img)
 vis_img3 = np.copy(vis_img)
 
 # Log transform enables us to view the large dynamic range of visibilities
-vis_img_mag = (np.abs(vis_img))**0.2
+vis_img_mag = (np.abs(vis_img))**0.08
 
 # The coordinates of the center of image plane.
 [x_0, y_0] = (np.array(np.shape(vis_img))/2).astype(np.int)
@@ -153,8 +153,8 @@ dirty_img_rot = np.abs(np.fft.ifft2(np.fft.fftshift(np.multiply(vis_img2,
                                                                 mask_rot))))
 
 
-psf = np.cbrt(np.abs(np.fft.fftshift(np.fft.ifft2(mask))))
-psf_rot = (np.abs(np.fft.fftshift(np.fft.ifft2(mask_rot)))**0.18)
+psf = (np.abs(np.fft.fftshift(np.fft.ifft2(mask)))**0.22)
+psf_rot = (np.abs(np.fft.fftshift(np.fft.ifft2(mask_rot)))**0.14)
 
 # Custom spectal colorpmap
 cmap = spectral()
@@ -303,10 +303,10 @@ fig.tight_layout()
 fig, (ax1, ax2, ax3) = plt.subplots(nrows=1, ncols=3, figsize=(15, 5))
 
 
-ax1.plot(array.E, array.N, '.', color='#c1e59e', alpha=0.4)
+ax1.plot(array.E, array.N, '.', color='#9bd6a2', alpha=0.6)
 ax1.set_title('Array Configuraton')
 ax1.set_aspect('equal')
-ax1.set_facecolor('#1c1e24')
+ax1.set_facecolor('#1b1d23')
 #ax1.axes.get_xaxis().set_visible(False)
 #ax1.axes.get_yaxis().set_visible(False)
 ax1.set_xlim((-x_0/2, x_0/2))
@@ -314,19 +314,19 @@ ax1.set_ylim((-y_0/2, y_0/2))
 
 #ax2.plot(np.concatenate(E - E[:, None]),
 #         np.concatenate(N - N[:, None]), '.', color='#dadada')
-ax2.plot(lx, ly, '.', color='#c1e59e', alpha=0.2)
+ax2.plot(lx, ly, '.', color='#9bd6a2', alpha=0.3)
 ax2.set_title('$UV$ Snapshot')
 ax2.set_aspect('equal')
-ax2.set_facecolor('#1c1e24')
+ax2.set_facecolor('#1b1d23')
 #ax2.axes.get_xaxis().set_visible(False)
 #ax2.axes.get_yaxis().set_visible(False)
 ax2.set_xlim((-x_0, x_0))
 ax2.set_ylim((-y_0, y_0))
 
-ax3.plot(u_rot, v_rot, ',', color='#c1e59e', alpha=0.1)
+ax3.plot(u_rot, v_rot, ',', color='#9bd6a2', alpha=0.1)
 ax3.set_title('$UV$ Rotation Synthesis')
 ax3.set_aspect('equal')
-ax3.set_facecolor('#1c1e24')
+ax3.set_facecolor('#1b1d23')
 #ax3.axes.get_xaxis().set_visible(False)
 #ax3.axes.get_yaxis().set_visible(False)
 ax3.set_xlim((-x_0, x_0))
