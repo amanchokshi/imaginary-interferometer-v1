@@ -14,12 +14,12 @@ source setup.sh
 
 `source setup.sh` creates a python virtual environment called `venv`, activates it, and installs all the required packages.  
 
-To get and idea of the options available:
+To get and idea of the options available:  
 ```
 python interferometer.py --help
 ```
 
-The Imaginary Inteferometer can be run with its default settings with:  
+The Imaginary Inteferometer can be run with its default settings with:   
 ```
 python interferometer.py
 ```
@@ -32,19 +32,23 @@ The code has a lot of comments which will help you understand the fundamentals o
 
 ### Introduction to Interferometry
 
-The image on the left of a star field is our imaginary "Sky" for the purpose of this excercise. Taking the 2D fourier transform of this "sky", results in the image on the right. These represent the "Visibility Amplituded" or the "U-V" plane. 
+The image on the left of a star field is our imaginary "Sky" for the purpose of this excercise. Taking the 2D fourier transform of this "sky", results in the image on the right. These represent the "Visibility Amplituded" or the "U-V" plane.  
 
 ![SKY](images/F-1.png)
 ![SKY](images/F-2.png)
 
-The dirty images produced by the imaginary interferometer, with and without rotation synthesis.
+The dirty images produced by the imaginary interferometer, with and without rotation synthesis.  
+
 ![SKY](images/F-3.png)
 ![SKY](images/F-4.png)
-The PSF (Point Spread Function) of the array with and without rotation synthesis.
+
+The PSF (Point Spread Function) of the array with and without rotation synthesis.  
+
 ![SKY](images/F-5.png)
 ![SKY](images/F-6.png)
 
-Array configuration, UV sampling instantaneous snapshot, and UV sampling with rotation synthesis.
+Array configuration, UV sampling instantaneous snapshot, and UV sampling with rotation synthesis.  
+
 ![SKY](images/F-7.png)
 
 
