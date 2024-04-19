@@ -17,7 +17,7 @@ parser = argparse.ArgumentParser(description="""Code aimed to build an intuitive
                                                 """)
 parser.add_argument('--array', metavar='\b', default='vla', help='Arrays: vla, askap, meetkat, heliograph, mwa-phase2')
 parser.add_argument('--image', metavar='\b', default='star', help='Sky image: star, hercules or fornax')
-parser.add_argument('--lattitude', metavar='\b', default=36, help='The lattitude of the array')
+parser.add_argument('--latitude', metavar='\b', default=36, help='The latitude of the array')
 parser.add_argument('--integration', metavar='\b', default=8, help='Total integration for Earth Rotation')
 parser.add_argument('--declination', metavar='\b', default=45, help='Declination of phase center of source')
 
@@ -25,12 +25,12 @@ parser.add_argument('--declination', metavar='\b', default=45, help='Declination
 args = parser.parse_args()
 array = args.array
 im = args.image
-lat = args.lattitude
+lat = args.latitude
 integration = args.integration
 dec = args.declination
 
 # The inupt image represents the 'true' sky intensity as a function of position
-img = np.array(Image.open('images/{}.png'.format(im)).convert("L"))
+img = np.array(Image.open(f'{im}').convert("L"))
 
 # Performing a 2D FFT on sky intensity will give us the complex visibilities.
 # fftshift shifts the zero frequency components to the center of the image.
@@ -44,8 +44,8 @@ vis_img3 = np.copy(vis_img)
 vis_img_mag = (np.abs(vis_img))**0.08
 
 # The coordinates of the center of image plane.
-[x_0, y_0] = (np.array(np.shape(vis_img))/2).astype(np.int)
-[x_m, y_m] = np.array(np.shape(vis_img)).astype(np.int)
+[x_0, y_0] = (np.array(np.shape(vis_img))/2).astype(np.int32)
+[x_m, y_m] = np.array(np.shape(vis_img)).astype(np.int32)
 
 array_latitude = int(lat)
 lat = np.radians(array_latitude)
@@ -130,8 +130,8 @@ v_rot = np.array(uvw[1]).ravel()
 #    u_lambda = np.array(uvw_lambda[0]).ravel()
 #    v_lambda = np.array(uvw_lambda[1]).ravel()
 #    mask_l = np.zeros(np.shape(vis_img3))
-#    mask_l[(np.around(v_lambda).astype(np.int)+y_0,
-#            np.around(u_lambda).astype(np.int)+x_0)] = 1
+#    mask_l[(np.around(v_lambda).astype(np.int32)+y_0,
+#            np.around(u_lambda).astype(np.int32)+x_0)] = 1
 #
 #    img_l = np.multiply(vis_img3, mask_l)
 #    images.append(abs(np.fft.ifft2(np.fft.fftshift(img_l))))
@@ -142,14 +142,14 @@ v_rot = np.array(uvw[1]).ravel()
 
 # Mask to sample visibilites
 mask = np.zeros(np.shape(vis_img))
-mask[np.around(lx).astype(np.int)+x_0,
-     np.around(ly).astype(np.int)+y_0] = 1
+mask[np.around(lx).astype(np.int32)+x_0,
+     np.around(ly).astype(np.int32)+y_0] = 1
 dirty_img = np.abs(np.fft.ifft2(np.fft.fftshift(np.multiply(vis_img1, mask))))
 
 # Mask of Rotation Synthesis
 mask_rot = np.zeros(np.shape(vis_img))
-mask_rot[np.around(u_rot).astype(np.int)+x_0,
-         np.around(v_rot).astype(np.int)+y_0] = 1
+mask_rot[np.around(u_rot).astype(np.int32)+x_0,
+         np.around(v_rot).astype(np.int32)+y_0] = 1
 dirty_img_rot = np.abs(np.fft.ifft2(np.fft.fftshift(np.multiply(vis_img2,
                                                                 mask_rot))))
 
